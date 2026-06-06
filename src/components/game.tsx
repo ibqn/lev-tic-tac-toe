@@ -1,26 +1,35 @@
 import { useMemo, useState } from 'react'
 import { Board } from '@/components/board'
 import type { SquareType } from '@/types'
+import { cn } from '@/utils/class-names'
 import { calculateWinner, isDraw } from '@/utils/game'
 
 export const Game = () => {
   const [squares, setSquares] = useState<SquareType[]>(Array(9).fill(null))
   const [move, setMove] = useState(0)
   const [history, setHistory] = useState<number[]>([])
+  const [firstPlayer, setFirstPlayer] = useState<SquareType>('X')
 
   const winner = useMemo(() => calculateWinner(squares), [squares])
-  const isXNext = move % 2 === 0
+
+  const secondPlayer: SquareType = firstPlayer === 'X' ? 'O' : 'X'
+  const playerForMove = (moveIndex: number): SquareType => (moveIndex % 2 === 0 ? firstPlayer : secondPlayer)
 
   const status = winner?.winner
     ? `Winner: ${winner.winner}`
     : isDraw(squares)
       ? 'Draw!'
-      : `Next player: ${isXNext ? 'X' : 'O'}`
+      : `Next player: ${playerForMove(move)}`
 
   const initialPosition = () => {
     setSquares(Array(9).fill(null))
     setMove(0)
     setHistory([])
+  }
+
+  const handleFirstPlayer = (player: SquareType) => {
+    setFirstPlayer(player)
+    initialPosition()
   }
 
   const handleSquare = (index: number) => {
@@ -29,7 +38,7 @@ export const Game = () => {
     }
     const nextHistory = [...history.slice(0, move), index]
     const nextSquares = squares.slice()
-    nextSquares[index] = move % 2 === 0 ? 'X' : 'O'
+    nextSquares[index] = playerForMove(move)
     setHistory(nextHistory)
     setSquares(nextSquares)
     setMove(nextHistory.length)
@@ -38,10 +47,13 @@ export const Game = () => {
   const jumpTo = (index: number) => {
     setMove(index + 1)
     setSquares(
-      history.slice(0, index + 1).reduce((position, currentMove, moveIndex) => {
-        position[currentMove] = moveIndex % 2 === 0 ? 'X' : 'O'
-        return position
-      }, Array(9).fill(null) as SquareType[])
+      history.slice(0, index + 1).reduce(
+        (position, currentMove, moveIndex) => {
+          position[currentMove] = playerForMove(moveIndex)
+          return position
+        },
+        Array(9).fill(null) as SquareType[]
+      )
     )
   }
 
@@ -58,6 +70,23 @@ export const Game = () => {
       <div className="w-full border-t border-slate-600"></div>
 
       <div className="flex w-full flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">First move:</span>
+          <div className="flex overflow-hidden rounded-md border border-slate-400">
+            {(['X', 'O'] as const).map((player) => (
+              <button
+                key={player}
+                onClick={() => handleFirstPlayer(player)}
+                className={cn(
+                  'px-4 py-1.5 font-semibold transition-colors',
+                  firstPlayer === player ? 'bg-slate-800 text-white' : 'hover:bg-slate-100 active:bg-slate-200'
+                )}
+              >
+                {player}
+              </button>
+            ))}
+          </div>
+        </div>
         <button
           onClick={initialPosition}
           className="rounded-md border border-slate-400 px-4 py-2 hover:bg-slate-100 active:bg-slate-200"
@@ -74,7 +103,7 @@ export const Game = () => {
                     onClick={() => jumpTo(index)}
                     className="rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-100 active:bg-slate-200"
                   >
-                    {index + 1}. {index % 2 === 0 ? 'X' : 'O'}-{historyMove + 1}
+                    {index + 1}. {playerForMove(index)}-{historyMove + 1}
                   </button>
                 </li>
               ))}
