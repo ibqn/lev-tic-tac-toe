@@ -8,7 +8,7 @@ export const Game = () => {
   const [squares, setSquares] = useState<SquareType[]>(Array(9).fill(null))
   const [move, setMove] = useState(0)
   const [history, setHistory] = useState<number[]>([])
-  const [firstPlayer, setFirstPlayer] = useState<SquareType>('X')
+  const [firstPlayer, setFirstPlayer] = useState<SquareType>('O')
 
   const winner = useMemo(() => calculateWinner(squares), [squares])
 
