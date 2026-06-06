@@ -25,7 +25,7 @@ export const Mark = ({ value }: Props) => {
           <line x1={0.8} y1={0.2} x2={0.2} y2={0.8} />
         </>
       ) : (
-        <circle cx={0.5} cy={0.5} r={0.3} />
+        <circle cx={0.5} cy={0.5} r={0.34} />
       )}
     </svg>
   )
