@@ -13,7 +13,7 @@ export const Square = ({ value, index, winning, onSelect }: Props) => {
     <button
       onClick={() => onSelect(index)}
       className={cn(
-        '-mt-px -mr-px flex h-[34px] w-[34px] items-center justify-center border border-[#999] text-2xl leading-[34px] font-bold',
+        'flex aspect-square w-full items-center justify-center bg-white text-5xl font-bold transition-colors select-none hover:bg-slate-100 active:bg-slate-200 sm:text-6xl',
         winning && 'text-red-500'
       )}
     >
