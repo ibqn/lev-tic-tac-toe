@@ -13,9 +13,25 @@ const cellCenter = (index: number) => ({
   y: Math.floor(index / 3) + 0.5,
 })
 
+// How far the line overshoots past the first/last cell centers, in cell units.
+const LINE_OVERSHOOT = 0.25
+
 export const Board = ({ squares, winningLine, onSelect }: Props) => {
-  const start = winningLine && cellCenter(winningLine[0])
-  const end = winningLine && cellCenter(winningLine[winningLine.length - 1])
+  const first = winningLine && cellCenter(winningLine[0])
+  const last = winningLine && cellCenter(winningLine[winningLine.length - 1])
+
+  // Extend the segment a bit beyond both ends along its own direction.
+  let start = first
+  let end = last
+  if (first && last) {
+    const dx = last.x - first.x
+    const dy = last.y - first.y
+    const len = Math.hypot(dx, dy)
+    const ux = dx / len
+    const uy = dy / len
+    start = { x: first.x - ux * LINE_OVERSHOOT, y: first.y - uy * LINE_OVERSHOOT }
+    end = { x: last.x + ux * LINE_OVERSHOOT, y: last.y + uy * LINE_OVERSHOOT }
+  }
 
   return (
     <div className="relative w-[min(90vw,320px)]">
