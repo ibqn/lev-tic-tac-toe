@@ -1,3 +1,4 @@
+import { Mark } from '@/components/mark'
 import { cn } from '@/utils/class-names'
 import type { SquareType } from '@/types'
 
@@ -13,11 +14,13 @@ export const Square = ({ value, index, winning, onSelect }: Props) => {
     <button
       onClick={() => onSelect(index)}
       className={cn(
-        'flex aspect-square w-full items-center justify-center bg-white text-5xl font-bold transition-colors select-none hover:bg-slate-100 active:bg-slate-200 sm:text-6xl',
+        'flex aspect-square w-full items-center justify-center bg-white transition-colors select-none hover:bg-slate-100 active:bg-slate-200',
+        value === 'X' && 'text-slate-800',
+        value === 'O' && 'text-sky-600',
         winning && 'text-red-500'
       )}
     >
-      {value}
+      <Mark value={value} />
     </button>
   )
 }
