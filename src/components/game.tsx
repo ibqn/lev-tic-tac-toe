@@ -67,19 +67,21 @@ export const Game = () => {
         </div>
       </div>
 
-      <div className="w-full border-t border-slate-600"></div>
+      <div className="w-full border-t border-slate-600 dark:border-slate-400"></div>
 
       <div className="flex w-full flex-col gap-2">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">First move:</span>
-          <div className="flex overflow-hidden rounded-md border border-slate-400">
+          <div className="flex overflow-hidden rounded-md border border-slate-400 dark:border-slate-500">
             {(['X', 'O'] as const).map((player) => (
               <button
                 key={player}
                 onClick={() => handleFirstPlayer(player)}
                 className={cn(
                   'px-4 py-1.5 font-semibold transition-colors',
-                  firstPlayer === player ? 'bg-slate-800 text-white' : 'hover:bg-slate-100 active:bg-slate-200'
+                  firstPlayer === player
+                    ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900'
+                    : 'hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-700 dark:active:bg-slate-600'
                 )}
               >
                 {player}
@@ -89,7 +91,7 @@ export const Game = () => {
         </div>
         <button
           onClick={initialPosition}
-          className="rounded-md border border-slate-400 px-4 py-2 hover:bg-slate-100 active:bg-slate-200"
+          className="rounded-md border border-slate-400 px-4 py-2 hover:bg-slate-100 active:bg-slate-200 dark:border-slate-500 dark:hover:bg-slate-700 dark:active:bg-slate-600"
         >
           Initial position
         </button>
@@ -101,7 +103,7 @@ export const Game = () => {
                 <li key={index}>
                   <button
                     onClick={() => jumpTo(index)}
-                    className="rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-100 active:bg-slate-200"
+                    className="rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-100 active:bg-slate-200 dark:border-slate-600 dark:hover:bg-slate-700 dark:active:bg-slate-600"
                   >
                     {index + 1}. {playerForMove(index)}-{historyMove + 1}
                   </button>

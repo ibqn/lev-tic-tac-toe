@@ -11,7 +11,7 @@ type Props = {
 export const Board = ({ squares, winningLine, onSelect }: Props) => {
   return (
     <div className="relative w-[min(90vw,320px)]">
-      <div className="grid grid-cols-3 grid-rows-3 gap-px border border-[#999] bg-[#999]">
+      <div className="grid grid-cols-3 grid-rows-3 gap-px border border-[#999] bg-[#999] dark:border-slate-600 dark:bg-slate-600">
         {squares.map((square, index) => (
           <Square
             key={index}
